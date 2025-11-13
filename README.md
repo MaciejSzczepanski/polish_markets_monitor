@@ -1,1 +1,0 @@
-# polish_markets_monitor
