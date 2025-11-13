@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "api"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.120.0",
+    "uvicorn[standard]>=0.38.0",
+    "data-access",
+    "pyarrow>=22.0.0",
+]
+
+[tool.uv.sources]
+data-access = { workspace = true }
+
+# Explicitly tell hatchling where packages are
+[tool.hatch.build.targets.wheel]
+packages = ["src/api"]

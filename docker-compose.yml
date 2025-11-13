@@ -1,0 +1,60 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
+    container_name: stock-api
+    ports:
+      - "127.0.0.1:8000:8000"
+    networks:
+      - stock-network
+    env_file:
+      - ./.env
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: services/dashboard/Dockerfile
+    container_name: stock-dashboard
+    ports:
+      - "127.0.0.1:8501:8501"
+    networks:
+      - stock-network
+    env_file:
+      - ./.env
+
+  postgres:
+    image: postgres:18-alpine
+    container_name: stock-postgres
+    restart: always
+    ports:
+      - "127.0.0.1:5555:5432"
+    networks:
+      - stock-network
+    env_file:
+      - ./.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dagster"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  dagster:
+    build:
+      context: .
+      dockerfile: services/dagster/Dockerfile
+    container_name: stock-dagster
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - stock-network
+    env_file:
+      - ./.env
+
+networks:
+  stock-network:
+    driver: bridge
+volumes:
+  postgres_data:

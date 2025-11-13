@@ -1,0 +1,10 @@
+storage:
+  postgres:
+    postgres_db:
+      username:
+        env: POSTGRES_USER
+      password:
+        env: POSTGRES_PASSWORD
+      hostname: stock-postgres
+      db_name: dagster
+      port: 5432

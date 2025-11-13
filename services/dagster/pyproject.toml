@@ -1,0 +1,35 @@
+[project]
+name = "stock-dagster"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "data-access",
+    "analytics",
+    "data-sources",
+    "dagster==1.12.1",
+    "dagster-webserver==1.12.1",
+    "dagster-postgres==0.28.1",
+    "google-genai>=1.49.0",
+    "pyarrow>=22.0.0"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+data-access = { workspace = true }
+analytics = { workspace = true }
+data-sources = { workspace = true }
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/stock_dagster"]
+
+[tool.dg]
+directory_type = "project"
+
+[tool.dg.project]
+root_module = "stock_dagster"
+registry_modules = [
+    "stock_dagster.components.*",
+]
