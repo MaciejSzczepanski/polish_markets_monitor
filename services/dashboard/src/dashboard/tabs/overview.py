@@ -39,8 +39,9 @@ def render(ohlc_daily: pl.DataFrame,
                     use_container_width=True
             ):
                 # Jump to Stocks tab with this ticker pre-selected
-                st.session_state['selected_ticker'] = company['isin']
+                st.session_state['selected_ticker'] = company['ticker']
                 st.session_state['requested_tab'] = "📈 Companies"
+                st.rerun()
 
             if i > 1: break
 
@@ -57,6 +58,7 @@ def render(ohlc_daily: pl.DataFrame,
             ):
                 st.session_state['selected_ticker'] = company['ticker']
                 st.session_state['requested_tab'] = "📈 Companies"
+                st.rerun()
 
             if i > 1: break
 
