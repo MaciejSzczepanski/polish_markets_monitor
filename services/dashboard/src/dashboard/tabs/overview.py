@@ -1,7 +1,30 @@
 import streamlit as st
-import polars as pl
 from analytics.metrics import calculate_gold_changes, calculate_currencies_changes, \
     calculate_daily_stock_performance
+import duckdb
+import polars as pl
+
+
+def update_ohlc_daily_aggregated(ohlc_daily: pl.DataFrame, ohlc_today_minutely: pl.DataFrame):
+    # ensuring the latest date/'live' data is added to the ohlc_daily dataframe which contains aggregated data
+    with duckdb.connect(database=":memory:") as conn:
+        conn.sql("SET TimeZone = 'Europe/Warsaw'")
+        ohlc_today_aggregated = duckdb.sql("""SELECT date::DATE               as date,
+                                                     isin,
+                                                     ARG_MIN(price, datetime) as open,
+                                                     ARG_MAX(price, datetime) as close,
+                                                     MIN(price)               as low,
+                                                     MAX(price)               as high,
+                                                     SUM(volume)              as volume
+                                              FROM ohlc_today_minutely
+                                              GROUP BY isin, date::DATE""").pl()
+    last_date_ohlc_minutely = ohlc_today_aggregated.select(pl.col('date').dt.date()).head(1).item()
+
+    ohlc_daily = pl.concat(
+        [ohlc_daily.filter(pl.col('date').dt.date() != last_date_ohlc_minutely), ohlc_today_aggregated],
+        how='vertical_relaxed')
+
+    return ohlc_daily
 
 
 def render(ohlc_daily: pl.DataFrame,
@@ -10,7 +33,6 @@ def render(ohlc_daily: pl.DataFrame,
            popular_currencies: pl.DataFrame,
            gold_prices: pl.DataFrame,
            llm_summary: dict):
-
     gold_prices = calculate_gold_changes(gold_prices)
 
     popular_currencies = (calculate_currencies_changes(popular_currencies).rename({'mid': 'price'})
@@ -18,11 +40,14 @@ def render(ohlc_daily: pl.DataFrame,
                           )
     n_currencies = popular_currencies.unique(subset='code').shape[0]
     popular_currencies = popular_currencies.tail(n_currencies).to_dicts()
+
+    #               )
     st.write(llm_summary['summary'])
     st.divider()
     st.subheader("🏆 Top Movers Today")
     col1, col2 = st.columns(2)
 
+    ohlc_daily = update_ohlc_daily_aggregated(ohlc_daily, ohlc_today_minutely)
     gainers, losers = calculate_daily_stock_performance(ohlc_daily, companies_meta)
 
     with col1:
