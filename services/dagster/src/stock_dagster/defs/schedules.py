@@ -1,7 +1,8 @@
 import dagster as dg
 
+from stock_dagster.defs.jobs import currency_daily, currency_unpopular, news_update, wig20_metadata, ohlc_job, \
+    gemini_job, gold_job
 
-from stock_dagster.defs.jobs import currency_daily, currency_unpopular, news_update, wig20_metadata, ohlc_job
 news = dg.ScheduleDefinition(
     description="""Today's news articles from selected sources""",
     job=news_update,
@@ -35,4 +36,17 @@ ohlc = dg.ScheduleDefinition(
     job=ohlc_job,
     cron_schedule="*/15 9-18 * * 1-5",
     execution_timezone='Europe/Warsaw'
+)
+
+gemini = dg.ScheduleDefinition(
+    description="Summarize day by Gemini model",
+    job=gemini_job,
+    cron_schedule="30 17 * * *",
+    execution_timezone='Europe/Warsaw'
+)
+
+gold = dg.ScheduleDefinition(
+    description="Gold rates",
+    job=gold_job,
+    cron_schedule='* 13 * * 1-5'
 )

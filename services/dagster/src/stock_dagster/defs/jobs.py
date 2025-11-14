@@ -29,3 +29,15 @@ ohlc_job = dg.define_asset_job(
     description="Daily OHLC data for WIG20",
     selection=dg.AssetSelection.assets("daily_ohlc")
 )
+
+gemini_job = dg.define_asset_job(
+    name="gemini_summary_job",
+    description="LLM daily summary of stock market news",
+    selection=dg.AssetSelection.groups('llm_summary')
+)
+
+gold_job = dg.define_asset_job(
+    name='gold_daily_job',
+    description="Daily gold price scraping job",
+    selection=dg.AssetSelection.assets("gold_prices")
+)
