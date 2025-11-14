@@ -43,7 +43,7 @@ The project is fully configured to run with a single command (requires an `.env`
 
 ```bash
 # Clone the repository
-git clone [https://github.com/MaciejSzczepanski/polish_markets_monitor](https://github.com/MaciejSzczepanski/polish_markets_monitor)
+git clone https://github.com/MaciejSzczepanski/polish_markets_monitor
 cd polish-markets
 
 # Build and run all services
