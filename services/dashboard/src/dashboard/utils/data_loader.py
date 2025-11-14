@@ -93,7 +93,7 @@ def load_all_news() -> pl.DataFrame:
     return news
 
 
-@st.cache_resource(ttl=timedelta(hours=24))
+@st.cache_resource(ttl=timedelta(hours=12))
 def load_currencies(curr_type='mid_market_rate', currencies_list: list[str] = None):
     currencies_data = []
     if currencies_list:
@@ -108,7 +108,7 @@ def load_currencies(curr_type='mid_market_rate', currencies_list: list[str] = No
         return pl.read_parquet(response.content)
 
 
-@st.cache_resource(ttl=timedelta(hours=24))
+@st.cache_resource(ttl=timedelta(hours=12))
 def load_gold_prices():
     response = req.get(f"{api}/gold")
     response.close()
