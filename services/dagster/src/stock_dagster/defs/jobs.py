@@ -24,3 +24,8 @@ wig20_metadata = dg.define_asset_job(
     selection=dg.AssetSelection.assets("wig20_companies_metadata")
 )
 
+ohlc_job = dg.define_asset_job(
+    name="ohlc_today",
+    description="Daily OHLC data for WIG20",
+    selection=dg.AssetSelection.assets("daily_ohlc")
+)

@@ -1,7 +1,7 @@
 import dagster as dg
 
-from stock_dagster.defs.jobs import currency_daily, currency_unpopular, news_update, wig20_metadata
 
+from stock_dagster.defs.jobs import currency_daily, currency_unpopular, news_update, wig20_metadata, ohlc_job
 news = dg.ScheduleDefinition(
     description="""Today's news articles from selected sources""",
     job=news_update,
@@ -27,5 +27,12 @@ wig20_metadata = dg.ScheduleDefinition(
     description="WIG20 Companies metadata update",
     job=wig20_metadata,
     cron_schedule="0 12 15 * *",
+    execution_timezone='Europe/Warsaw'
+)
+
+ohlc = dg.ScheduleDefinition(
+    description="OHLC data for WIG20 companies",
+    job=ohlc_job,
+    cron_schedule="*/15 9-18 * * 1-5",
     execution_timezone='Europe/Warsaw'
 )
