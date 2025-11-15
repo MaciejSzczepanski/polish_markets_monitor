@@ -13,7 +13,7 @@ news = dg.ScheduleDefinition(
 currency = dg.ScheduleDefinition(
     description="Today's currency rates for popular currencies, mid market rate and bid/ask",
     job=currency_daily,
-    cron_schedule='0 12 * * *',
+    cron_schedule='0 12 * * 1-5',
     execution_timezone='Europe/Warsaw'
 )
 
@@ -41,7 +41,7 @@ ohlc = dg.ScheduleDefinition(
 gemini = dg.ScheduleDefinition(
     description="Summarize day by Gemini model",
     job=gemini_job,
-    cron_schedule="30 17 * * *",
+    cron_schedule="30 17 * * 1-5",
     execution_timezone='Europe/Warsaw'
 )
 
