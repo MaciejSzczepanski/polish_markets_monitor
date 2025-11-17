@@ -33,7 +33,7 @@ ohlc_job = dg.define_asset_job(
 gemini_job = dg.define_asset_job(
     name="gemini_summary_job",
     description="LLM daily summary of stock market news",
-    selection=dg.AssetSelection.groups('llm_summary')
+    selection=dg.AssetSelection.assets('gemini_daily_summary')
 )
 
 gold_job = dg.define_asset_job(
