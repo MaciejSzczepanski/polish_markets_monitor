@@ -48,5 +48,5 @@ gemini = dg.ScheduleDefinition(
 gold = dg.ScheduleDefinition(
     description="Gold rates",
     job=gold_job,
-    cron_schedule='* 13 * * 1-5'
+    cron_schedule='0 13 * * 1-5'
 )
